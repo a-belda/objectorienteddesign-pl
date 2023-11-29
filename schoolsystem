@@ -1,0 +1,177 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Person {
+    protected String name;
+    protected int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void info() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+
+class Student extends Person {
+    private String studentId;
+    private ArrayList<String> courses;
+
+    public Student(String name, int age, String studentId) {
+        super(name, age);
+        this.studentId = studentId;
+        this.courses = new ArrayList<>();
+    }
+
+    public void enroll(String course) {
+        courses.add(course);
+    }
+
+    public void displayCourses() {
+        System.out.println("Enrolled courses:");
+        for (String course : courses) {
+            System.out.println(course);
+        }
+    }
+}
+
+class Teacher extends Person {
+    private String teacherId;
+    private ArrayList<String> classesTaught;
+    private ArrayList<String> sections;
+
+    public Teacher(String name, int age, String teacherId) {
+        super(name, age);
+        this.teacherId = teacherId;
+        this.classesTaught = new ArrayList<>();
+        this.sections = new ArrayList<>();
+    }
+
+    public void addClass(String className) {
+        classesTaught.add(className);
+    }
+
+    public void addSection(String section) {
+        sections.add(section);
+    }
+
+    public void displaySections() {
+        for (String section : sections) {
+            System.out.println(section);
+        }
+    }
+}
+
+class Principal extends Person {
+    private ArrayList<Teacher> instructors;
+
+    public Principal(String name, int age) {
+        super(name, age);
+        this.instructors = new ArrayList<>();
+    }
+
+    public void addInstructor(Teacher instructor) {
+        instructors.add(instructor);
+    }
+
+    public void displayInstructors() {
+        System.out.println("Instructors:");
+        for (Teacher instructor : instructors) {
+            instructor.info();
+        }
+    }
+}
+
+class SchoolAdministrator extends Person {
+    private ArrayList<String> programs;
+
+    public SchoolAdministrator(String name, int age) {
+        super(name, age);
+        this.programs = new ArrayList<>();
+    }
+
+    public void addProgram(String program) {
+        programs.add(program);
+    }
+
+    public void displayPrograms() {
+        for (String program : programs) {
+            System.out.println(program);
+        }
+    }
+}
+
+class SchoolManagementSystem {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        Principal principal = new Principal("Principal Name", 50);
+        
+        System.out.println("Enter role (s for student, t for teacher, p for principal, sa for school administrator): ");
+        String role = scan.nextLine();
+
+        switch (role) {
+            case "s":
+                // Prompt student details..
+                System.out.println("Enter your student id: ");
+                String studentId = scan.nextLine();
+
+                System.out.println("Enter your name: ");
+                String name = scan.nextLine();
+
+                System.out.println("Enter your age: ");
+                int age = scan.nextInt();
+
+                System.out.println("Enter the courses you want to take (separated by a space): ");
+                scan.nextLine();
+                String input = scan.nextLine();
+                String[] courseList = input.split(" ");
+
+                Student student = new Student(name, age, studentId);
+                for (String course : courseList) {
+                    student.enroll(course);
+                }
+
+                student.info();
+                student.displayCourses();
+                break;
+            case "t":
+                // Prompt teacher details..
+                System.out.println("Enter your teacher id: ");
+                String teacherId = scan.nextLine();
+
+                System.out.println("Enter your name: ");
+                String tName = scan.nextLine();
+
+                System.out.println("Enter your age: ");
+                int tAge = scan.nextInt();
+
+                scan.nextLine();
+                System.out.println("Enter the classes you teach (separated by a space): ");
+                String classesInput = scan.nextLine();
+                String[] classesList = classesInput.split(" ");
+
+                Teacher teacher = new Teacher(tName, tAge, teacherId);
+                for (String className : classesList) {
+                    teacher.addClass(className);
+                }
+                teacher.info();
+                teacher.displaySections();
+                principal.addInstructor(teacher);
+                break;
+            case "p":
+                // Display principal's instructors..
+                principal.info();
+                principal.displayInstructors();
+                break;
+            case "sa":
+                // For school administrator..
+                System.out.println("This functionality is not yet implemented.");
+                break;
+            default:
+                System.out.println("Invalid role");
+        }
+    }
+}
